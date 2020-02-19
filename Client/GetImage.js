@@ -13,10 +13,11 @@ var imgsize;
 
 var name;
 var ver;
+var cached = false;
 
 var net = require('net');
 var HOST = '127.0.0.1';
-var PORT = 3000;
+var PORT = 3001;
 var client = new net.Socket();
 
 
@@ -30,6 +31,18 @@ for(var i = 0; i < process.argv.length; i++){
 if (name == undefined)
     console.log("-q tag must be used to perform a query");
 else{
+    fs.readdir(__dirname + '\\image_cache', function(err, items) {
+        for (var i=0; i<items.length; i++) {
+            
+            if (items[i] == name)
+            {
+                opn("image_cache/" + name).then(() => {});
+                console.log("Image retrieved from cache.");
+                cached = true;
+            }              
+        }
+    });
+
     // set default version
     if(ver == undefined)
         ver = 3314;
@@ -39,7 +52,8 @@ else{
 }
 client.connect(PORT, HOST, function() {
     console.log('Connected to ImageDB server on: ' + HOST + ':' + PORT);
-    client.write(image);
+    if(!cached)
+        client.write(image);
 });
 client.on('data', function(data) {
 
@@ -63,8 +77,8 @@ client.on('data', function(data) {
        + "\n  --Image Size: " + imgsize.readUInt32BE(0) + "\n\n");
        
        // open image in image viewer
-       fs.writeFile(name, img, function() {
-            opn(name).then(() => {});
+       fs.writeFile("image_cache/" + name, img, function() {
+            opn("image_cache/" + name).then(() => {});
        });
       
     } else 

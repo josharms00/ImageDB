@@ -6,7 +6,7 @@ let net = require('net'),
     handler = require('./ClientsHandler');
 
 let HOST = '127.0.0.1',
-    PORT = 3000;
+    PORT = 3001;
 
 // Create a imageDB instance, and chain the listen function to it
 // The function passed to net.createServer() becomes the event handler for the 'connection'
