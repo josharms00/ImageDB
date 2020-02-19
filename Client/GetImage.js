@@ -25,7 +25,7 @@ for(var i = 0; i < process.argv.length; i++){
     if(process.argv[i] == "-v")
         ver = process.argv[i + 1];
     else if(process.argv[i] == "-q")
-        name = process.argv[i + 1];
+        name = process.argv[i + 1].toLowerCase();
 }
 if (name == undefined)
     console.log("-q tag must be used to perform a query");
